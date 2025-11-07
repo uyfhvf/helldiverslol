@@ -1,0 +1,777 @@
+<html lang="zh-CN"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>绝地潜兵2 - 官方介绍网站</title>
+    <!-- Favicon -->
+    <link rel="icon" href="https://p3-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/d726e8636ab3420d8ba53f7b513a1199.jpg~tplv-a9rns2rl98-24:720:720.image?rcl=2025110716580336EC8FB0D2C6D7B1CE0C&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1763110684&x-signature=evoqN9IWn0q%2FX3n2zuLwjoc7SYg%3D" type="image/jpeg">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap');
+        
+        :root {
+            --primary-color: #0a1128;
+            --secondary-color: #1282a2;
+            --accent-color: #ffc145;
+            --danger-color: #ff5a5f;
+            --dark-color: #000000;
+            --light-color: #f8f9fa;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--primary-color);
+            color: var(--light-color);
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .text-glow {
+            text-shadow: 0 0 5px var(--secondary-color), 0 0 10px var(--secondary-color);
+        }
+        
+        .text-glow-accent {
+            text-shadow: 0 0 5px var(--accent-color), 0 0 10px var(--accent-color);
+        }
+        
+        .bg-gradient {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--dark-color) 100%);
+        }
+        
+        .card {
+            background: rgba(18, 130, 162, 0.1);
+            border: 1px solid rgba(18, 130, 162, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(18, 130, 162, 0) 0%,
+                rgba(18, 130, 162, 0.1) 50%,
+                rgba(18, 130, 162, 0) 100%
+            );
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+            opacity: 0;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 0 15px rgba(18, 130, 162, 0.5);
+            border-color: rgba(18, 130, 162, 0.7);
+        }
+        
+        .card:hover::before {
+            animation: shine 1.5s infinite;
+            opacity: 1;
+        }
+        
+        @keyframes shine {
+            0% {
+                top: -50%;
+                left: -50%;
+            }
+            100% {
+                top: 150%;
+                left: 150%;
+            }
+        }
+        
+        /* 导航栏样式优化 */
+        .navbar {
+            transition: all 0.3s ease;
+        }
+        
+        .navbar.scrolled {
+            background: rgba(10, 17, 40, 0.95);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary-color);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+        
+        /* 按钮样式优化 */
+        .btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.6s ease;
+            z-index: -1;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 15px rgba(255, 193, 69, 0.7);
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        /* 滚动指示器 */
+        .scroll-indicator {
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        /* 渐变背景动画 */
+        .animated-bg {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .animated-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 50%, rgba(18, 130, 162, 0.1) 0%, transparent 40%),
+                        radial-gradient(circle at 70% 20%, rgba(255, 193, 69, 0.05) 0%, transparent 30%);
+            animation: float 15s ease-in-out infinite;
+            z-index: -1;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translate(0, 0);
+            }
+            50% {
+                transform: translate(20px, 20px);
+            }
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(18, 130, 162, 0.2);
+            border-color: var(--secondary-color);
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: transparent;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 10px var(--secondary-color);
+        }
+        
+        .btn-accent {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: var(--dark-color);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-accent:hover {
+            background-color: transparent;
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            box-shadow: 0 0 10px var(--accent-color);
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary-color);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .active-nav::after {
+            width: 100%;
+        }
+        
+        #hero-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .section {
+            padding: 6rem 0;
+            position: relative;
+        }
+        
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: var(--secondary-color);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .race-card {
+            height: 400px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .race-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .race-card:hover img {
+            transform: scale(1.1);
+        }
+        
+        .race-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 2rem;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0) 100%);
+        }
+        
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: var(--secondary-color);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+        
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: var(--accent-color);
+            border: 4px solid var(--secondary-color);
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        
+        .timeline-left {
+            left: 0;
+        }
+        
+        .timeline-right {
+            left: 50%;
+        }
+        
+        .timeline-left::after {
+            right: -13px;
+        }
+        
+        .timeline-right::after {
+            left: -13px;
+        }
+        
+        .timeline-content {
+            padding: 20px 30px;
+            background-color: rgba(10, 17, 40, 0.8);
+            border: 1px solid rgba(18, 130, 162, 0.3);
+            border-radius: 6px;
+            backdrop-filter: blur(10px);
+        }
+        
+        @media screen and (max-width: 768px) {
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item::after {
+                left: 18px;
+            }
+            
+            .timeline-left, .timeline-right {
+                left: 0;
+            }
+        }
+        
+        /* 动画类 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .fade-in.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* 滚动指示器 */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) translateX(-50%);
+            }
+            40% {
+                transform: translateY(-20px) translateX(-50%);
+            }
+            60% {
+                transform: translateY(-10px) translateX(-50%);
+            }
+        }
+        
+        /* 加载动画 */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--primary-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        
+        .loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .loader-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .loader-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(18, 130, 162, 0.3);
+            border-top: 5px solid var(--secondary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- 加载动画 -->
+    <div class="loader">
+        <div class="loader-content">
+            <div class="loader-spinner"></div>
+            <h2 class="text-xl font-bold text-glow">Loading...</h2>
+        </div>
+    </div>
+
+    <!-- 导航栏 -->
+    <nav class="navbar bg-primary-color bg-opacity-90 backdrop-blur-md fixed w-full z-50 border-b border-secondary-color border-opacity-30">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center">
+                        <span class="text-2xl font-bold text-glow">Helldivers 2</span>
+                    </a>
+                </div>
+                
+                <!-- 桌面导航 -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="nav-link active-nav text-white hover:text-secondary-color transition-colors">home page</a>
+                    <a href="company.html" class="nav-link text-white hover:text-secondary-color transition-colors">game company</a>
+                    <a href="background.html" class="nav-link text-white hover:text-secondary-color transition-colors">Game background</a>
+                    <a href="races.html" class="nav-link text-white hover:text-secondary-color transition-colors">Game Race</a>
+                </div>
+                
+                <!-- 移动端菜单按钮 -->
+                <div class="md:hidden">
+                    <button id="menu-toggle" class="text-white focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 移动端导航菜单 -->
+            <div id="mobile-menu" class="md:hidden hidden mt-4 pb-4">
+                <a href="index.html" class="block py-2 text-white hover:text-secondary-color transition-colors">首页</a>
+                <a href="company.html" class="block py-2 text-white hover:text-secondary-color transition-colors">游戏公司</a>
+                <a href="background.html" class="block py-2 text-white hover:text-secondary-color transition-colors">游戏背景</a>
+                <a href="races.html" class="block py-2 text-white hover:text-secondary-color transition-colors">游戏种族</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 英雄区域 -->
+    <section class="relative h-screen flex items-center justify-center overflow-hidden">
+        <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/364d6b8d8ce646ca8c1238a1b37758c7~tplv-a9rns2rl98-image.image?rcl=202511062346372016CEA1F5E35341A126&amp;rk3s=8e244e95&amp;rrcfp=e75484ac&amp;x-expires=1763048803&amp;x-signature=NIyZnATQOhy%2FwFzLwfdhU0mD0os%3D" alt="科幻背景" class="absolute inset-0 w-full h-full object-cover">
+        <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+        <div class="container mx-auto px-4 z-10 text-center">
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-glow">Helldivers 2</h1>
+            <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">Fight for the Super Earth and travel through hostile galaxies. Becoming a soldier of the elite class, the mission is to spread peace, freedom, and democratic governance.</p>
+            <div class="flex flex-col md:flex-row justify-center gap-4">
+                <a href="background.html" class="btn-primary px-8 py-3 rounded-md font-bold flex-1 md:flex-none text-center" style="min-width: 250px;">Understand the game background</a>
+                <a href="races.html" class="btn-accent px-8 py-3 rounded-md font-bold flex-1 md:flex-none text-center" style="min-width: 250px;">Explore game races</a>
+            </div>
+        </div>
+        <div class="scroll-indicator text-white">
+            <i class="fas fa-chevron-down text-2xl"></i>
+        </div>
+    </section>
+
+    <!-- 游戏特色 -->
+    <section class="section bg-gradient">
+        <div class="container mx-auto px-4">
+            <h2 class="section-title text-3xl md:text-4xl font-bold text-center mb-12">Game Features</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="card p-6 rounded-lg text-center fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Four person collaboration</h3>
+                    <p class="text-gray-300">Team up with up to four players to complete tasks together and fight against powerful enemies.
+</p>
+                </div>
+                <div class="card p-6 rounded-lg text-center fade-in" style="transition-delay: 0.2s;">
+                    <div class="feature-icon">
+                        <i class="fas fa-crosshairs"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Strategic weapons</h3>
+                    <p class="text-gray-300">Use the largest, worst, and most explosive weapons in the Milky Way to destroy enemies.</p>
+                </div>
+                <div class="card p-6 rounded-lg text-center fade-in" style="transition-delay: 0.4s;">
+                    <div class="feature-icon">
+                        <i class="fas fa-globe-americas"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Global War Situation</h3>
+                    <p class="text-gray-300">Global players share the overall progress of the battle and jointly determine the fate of humanity.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 游戏简介 -->
+    <section class="section">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center gap-8">
+                <div class="md:w-1/2 fade-in">
+                    <h2 class="section-title text-3xl md:text-4xl font-bold">Game Introduction</h2>
+                    <p class="mb-4 text-gray-300">Helldivers 2 is a third person shooter game developed by Arrow Studios and published by Sony. It is a sequel to Helldivers in 2015. The game is set in the era of human Daewoo Navigation, where players take on the role of helldiver submarines and drive spacecraft to various planets to carry out military missions.</p>
+                    <p class="mb-6 text-gray-300">The game supports online cooperation among four players, and players can call for various forms of support, such as airdropped weapons and equipment, airdropped mecha, air raids, shelling, etc. The strategic points obtained by players completing tasks will affect the course of the battle, and global players will share the overall progress of the battle.</p>
+                    <a href="background.html" class="btn-primary px-6 py-2 rounded-md font-bold inline-block">Learn more</a>
+                </div>
+                <div class="md:w-1/2 fade-in" style="transition-delay: 0.3s;">
+                    <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/31edaf172ad64b0fb6d23c402558793e~tplv-a9rns2rl98-image.image?rcl=20251107121648A1B70AF58582B36BB23A&amp;rk3s=8e244e95&amp;rrcfp=e75484ac&amp;x-expires=1763093809&amp;x-signature=2O88wOVkml7CBQZvz5IEbV7af0A%3D" alt="绝地潜兵2游戏画面" class="rounded-lg shadow-xl w-full">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 游戏种族 -->
+    <section class="section bg-gradient">
+        <div class="container mx-auto px-4">
+            <h2 class="section-title text-3xl md:text-4xl font-bold text-center mb-12">Game Race</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="race-card rounded-lg overflow-hidden fade-in">
+                    <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/45b80cd60d71479e80c6eb9b97756069~tplv-a9rns2rl98-image.image?rcl=20251107121017CA10A3AE55231B948683&amp;rk3s=8e244e95&amp;rrcfp=e75484ac&amp;x-expires=1763093418&amp;x-signature=7lwIzhWegqGcsX2g6y6C0kjtQ4M%3D" alt="终结族">
+                    <div class="race-overlay">
+                        <h3 class="text-xl font-bold mb-2">Terminids</h3>
+                        <p class="text-sm text-gray-300">The Terminids are the successors of the bugs of the First Galactic War. After years of selective breeding changed their physiology , they have escaped their Element-710 farms and now spread unchecked.</p>
+                        <a href="races.html#terminids" class="mt-4 inline-block text-secondary-color hover:underline">Learn more</a>
+                    </div>
+                </div>
+                <div class="race-card rounded-lg overflow-hidden fade-in" style="transition-delay: 0.2s;">
+                    <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/52241ff74bca4775b2ff4e796cd21a47~tplv-a9rns2rl98-image.image?rcl=20251107121027C66BFDE2779E4088B29A&amp;rk3s=8e244e95&amp;rrcfp=e75484ac&amp;x-expires=1763093427&amp;x-signature=Bou%2FFA0O7PEISca2s3ywbgJxfKI%3D" alt="机械族">
+                    <div class="race-overlay">
+                        <h3 class="text-xl font-bold mb-2">Automatons</h3>
+                        <p class="text-sm text-gray-300">The Automatons are the children of the Cyborgs, sharing their goal of declaring independence from Super Earth.
+
+They attack with heavily armored but slow moving infantry and vehicles, supported by fragile light infantry. They also make use of numerous support structures, such as mortars and scanning towers.
+
+
+</p>
+                        <a href="races.html#automatons" class="mt-4 inline-block text-secondary-color hover:underline">Learn more</a>
+                    </div>
+                </div>
+                <div class="race-card rounded-lg overflow-hidden fade-in" style="transition-delay: 0.4s;">
+                    <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/5cd480bbe6464fdd95a68faf6374b6b2~tplv-a9rns2rl98-image.image?rcl=20251107122158519A9BB07F328BA2D4B9&amp;rk3s=8e244e95&amp;rrcfp=e75484ac&amp;x-expires=1763094118&amp;x-signature=BFNFZ84lcMHFwGGQpwa7Bnudk1A%3D" alt="光能族">
+                    <div class="race-overlay">
+                        <h3 class="text-xl font-bold mb-2">Illuminate</h3>
+                        <p class="text-sm text-gray-300">The Illuminate are an ancient race from the First Galactic War, once thought completely decimated after their defeat in the First Galactic War. Now, they have returned to avenge Super Earths genocide of their ancestors.</p>
+                        <a href="races.html#illuminates" class="mt-4 inline-block text-secondary-color hover:underline">Learn more</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 游戏公司 -->
+    <section class="section">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row-reverse items-center gap-8">
+                <div class="md:w-1/2 fade-in">
+                    <h2 class="section-title text-3xl md:text-4xl font-bold">game company</h2>
+                    <p class="mb-4 text-gray-300">Helldivers 2 is developed by Swedish game development company Arrowhead Game Studios and released by Sony. Arrowhead was founded in 2008 as just four young men developing games in the kitchen, and has now become a world-class game development studio.</p>
+                    <p class="mb-6 text-gray-300">In 2025, Tencent purchased over 15% of Arrowhead's equity for approximately 5 billion Swedish kronor (approximately 3.7 billion RMB), opening a new window into the Chinese market.</p>
+                    <a href="company.html" class="btn-primary px-6 py-2 rounded-md font-bold inline-block">Learn more</a>
+                </div>
+                <div class="md:w-1/2 fade-in" style="transition-delay: 0.3s;">
+                    <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/b329494d9b464a279c7ee81d779c3c26~tplv-a9rns2rl98-image.image?rcl=20251107120043F982B85271EFE99B94C7&amp;rk3s=8e244e95&amp;rrcfp=e75484ac&amp;x-expires=1763092843&amp;x-signature=%2FoVfD3tUFYZwCxZjdD%2Buh6QHyB4%3D" alt="Arrowhead Game Studios" class="rounded-lg shadow-xl w-full">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark-color py-8 border-t border-secondary-color border-opacity-30">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <h3 class="text-xl font-bold text-glow mb-2">Helldivers 2</h3>
+                    <p class="text-gray-400">How about a nice cup of liber-tea</p>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-secondary-color transition-colors">
+                        <i class="fab fa-twitter text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-secondary-color transition-colors">
+                        <i class="fab fa-facebook-f text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-secondary-color transition-colors">
+                        <i class="fab fa-instagram text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-secondary-color transition-colors">
+                        <i class="fab fa-youtube text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="mt-8 pt-4 border-t border-gray-800 text-center text-gray-500">
+                <p>© 2025 绝地潜兵2官方介绍网站. 所有权利保留.</p>
+                <p class="mt-2 text-sm">This website is only used for game introduction and is not an official website</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 加载动画
+        window.addEventListener('load', () => {
+            const loader = document.querySelector('.loader');
+            setTimeout(() => {
+                loader.classList.add('hidden');
+            }, 1000);
+        });
+        
+        // 移动端菜单
+        document.getElementById('menu-toggle').addEventListener('click', () => {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // 滚动动画
+        function checkFadeElements() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            fadeElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                if (elementTop < windowHeight - 100) {
+                    element.classList.add('active');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', checkFadeElements);
+        window.addEventListener('load', checkFadeElements);
+        
+        // Three.js 背景
+        function initThreeBackground() {
+            const canvas = document.getElementById('hero-canvas');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            
+            const renderer = new THREE.WebGLRenderer({
+                canvas: canvas,
+                antialias: true,
+                alpha: true
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            
+            // 创建星星
+            const starsGeometry = new THREE.BufferGeometry();
+            const starsCount = 1500;
+            
+            const posArray = new Float32Array(starsCount * 3);
+            
+            for (let i = 0; i < starsCount * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 5;
+            }
+            
+            starsGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            
+            const starsMaterial = new THREE.PointsMaterial({
+                size: 0.005,
+                color: 0x1282a2
+            });
+            
+            const starsMesh = new THREE.Points(starsGeometry, starsMaterial);
+            scene.add(starsMesh);
+            
+            // 添加星云效果
+            const nebulaGeometry = new THREE.SphereGeometry(2, 32, 32);
+            const nebulaMaterial = new THREE.MeshBasicMaterial({
+                color: 0x0a1128,
+                transparent: true,
+                opacity: 0.8,
+                side: THREE.BackSide
+            });
+            
+            const nebulaMesh = new THREE.Mesh(nebulaGeometry, nebulaMaterial);
+            scene.add(nebulaMesh);
+            
+            camera.position.z = 2;
+            
+            // 动画
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                starsMesh.rotation.y += 0.001;
+                nebulaMesh.rotation.y += 0.0002;
+                
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+            
+            // 响应窗口大小变化
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+        
+        // 初始化Three.js背景
+        window.addEventListener('load', initThreeBackground);
+    </script>
+
+
+</body></html>
